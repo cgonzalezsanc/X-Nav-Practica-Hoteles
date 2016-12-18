@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+	HTML de la práctica final de DAT
+	Autor: Carlos González Sánchez
+-->
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<title>Alojamientos en Madrid</title>
+
+		<!-- Hojas de estilo -->
+		<link href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" rel="stylesheet">
+		<link href="CSS/alojamientos.css" rel="stylesheet">
+		<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+
+		<!-- Javascript -->
+		<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<script type="text/javascript" src="JS/alojamientos.js"></script>
+	</head>
+
+	<body>
+		<header>
+			<h1> Alojamientos en Madrid </h1>
+		</header>
+		<div id="banner"></div>
+		<p id="botones-github"></p>
+		<div id="pestañas">
+			<ul>
+				<li><a href="#principal">Principal</a></li>
+				<li><a href="#colecciones">Colecciones</a></li>
+				<li><a href="#alojamientos">Alojamientos</a></li>
+			</ul>
+			<p id="cargarJSON">Haz click aquí para cargar los alojamientos</p>
+			<div id="principal">
+				<div id="mapa"></div>
+				<p id="infoAlojReducida"></p>
+				<p id="listaColeccion"></p>
+				<p class="lista-total"></p>
+			</div>
+			<div id="colecciones">
+				<p class="lista-total"></p>
+			</div>
+			<div id="alojamientos">
+				<p id="infoAlojCompleta"></p>
+			</div>
+		</div>
+	</body>
+</html>
