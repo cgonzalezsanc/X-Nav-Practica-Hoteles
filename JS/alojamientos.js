@@ -51,7 +51,7 @@ function cargar_datos() {
             repositorio.read('master', fichero, function(err, data) {
                     colecciones = JSON.parse(data);
                     // Se cargan todos los campos de las colecciones
-                    cargar_colecciones();
+                    mostrar_colecciones();
             });
         }  
     });
@@ -59,7 +59,7 @@ function cargar_datos() {
 
 /* Muestra el formulario para introducir el token, el nombre del repositorio y el nombre del 
    fichero, y habilita el handler para guardar los datos */
-function click_guardar() {
+function form_guardar() {
     $('#token-form').html("Token: <input type='text' name='token' value='' id='token' "
                           + "size='36' />"
                           + "Repositorio: <input type='text' name='repo' value='X-Nav-Practica-Hoteles' "
@@ -71,7 +71,7 @@ function click_guardar() {
 }
 
 /* Muestra el formulario para introducir el token y habilita el handler para guardar los datos */
-function click_cargar() {
+function form_cargar() {
     $('#token-form').html("Token: <input type='text' name='token' value='' id='token' "
                           + "size='36' />"
                           + "Repositorio: <input type='text' name='repo' value='X-Nav-Practica-Hoteles' "
@@ -80,6 +80,15 @@ function click_cargar() {
                           + "value='datos.json' size='10' />"
                           + "<button type='button' id='cargar-github'>Cargar de Github</button>");
     $("div#token-form button#cargar-github").click(cargar_datos);
+}
+
+// Se muestran los botones para cargar y guardar en github y se habilita el handler
+function mostrar_botones_github() {
+    $('#botones-github').html("<button type='button' id='guardar'>Guardar</button>"
+                              + "<button type='button' id='cargar'>Cargar</button>"
+                              + "<div id='token-form'></div>");
+    $('button#guardar').click(form_guardar);
+    $('button#cargar').click(form_cargar);
 }
 
 // --------------------------------------COLECCIONES-------------------------------------------
@@ -104,18 +113,45 @@ function mostrar_alojamientos_coleccion(coleccion) {
 
 // Añade un alojamiento a la colección seleccionada
 function añadir_alojamiento_a_coleccion() {
-    // Guardo el identificador en la coleccion
-    coleccion_seleccionada.lista_alojamientos.push($(this).attr('no'));
-    // Actualizo el HTML de la lista de los alojamientos de una coleccion
-    mostrar_alojamientos_coleccion(coleccion_seleccionada);
+    // Guardo el identificador en la coleccion si aún no está
+    if (coleccion_seleccionada.lista_alojamientos.indexOf($(this).attr('no')) == -1) {
+        coleccion_seleccionada.lista_alojamientos.push($(this).attr('no'));
+        // Actualizo el HTML de la lista de los alojamientos de una coleccion
+        mostrar_alojamientos_coleccion(coleccion_seleccionada);
+    }
 }
 
 // Cuando se selecciona una coleccion se muestra la lista de sus alojamientos
 function seleccionar_coleccion() {
     var coleccion = colecciones[$(this).attr('no')];
-    // Guardo en una variable global la coleccion
     coleccion_seleccionada = coleccion;
     mostrar_alojamientos_coleccion(coleccion);
+}
+
+// Comprueba si existe el nombre de una colección
+function nombre_coleccion_repetido(nombre) {
+    encontrado = false;
+    for (var i=0; i < colecciones.length; i++) {
+        if (nombre == colecciones[i].nombre) {
+            encontrado = true;
+        }
+    }
+    return encontrado;
+}
+
+// Crea una colección y la añade a la lista de colecciones si el nombre no está repetido
+function añadir_coleccion() {
+    var nombreColeccion = $("input#nombre_coleccion").val();
+    if (!nombre_coleccion_repetido(nombreColeccion)) {
+        var coleccion = {nombre:nombreColeccion, lista_alojamientos:[]};
+        colecciones.push(coleccion);
+        // Refresco la informacion del HTML
+        mostrar_colecciones();
+    } else {
+        alert("Nombre de colección repetido");
+    }
+    // Elimino el contenido del formulario
+    $("input#nombre_coleccion").val("")
 }
 
 // Muestra todas las colecciones creadas
@@ -130,34 +166,35 @@ function mostrar_colecciones() {
         }
         lista = lista + "</ul>";
     }
-    $('.lista-colecciones').html(lista);
+    $('#lista-colecciones').html(lista);
+    // Handler para seleccionar una coleccion
+    $('#lista-colecciones li').click(seleccionar_coleccion);
 }
 
-// Crea una colección y la añade a la lista de colecciones
-function añadir_coleccion() {
-    var nombreColeccion = $("input#nombre_coleccion").val();
-    var coleccion = {nombre:nombreColeccion, lista_alojamientos:[]};
-    colecciones.push(coleccion);
-    // Refresco la informacion del HTML
+// Carga la interfaz de las colecciones
+function mostrar_interfaz_colecciones() {
+    colecciones = [];
+    coleccion_seleccionada = "";
     mostrar_colecciones();
-    // Elimino el contenido del formulario
-    $("input#nombre_coleccion").val("")
-    // Refresco el handler para seleccionar cada coleccion
-    $(".lista-colecciones li").click(seleccionar_coleccion);
+    // Formulario para crear colecciones
+    $('#form-nueva-coleccion').html("Nombre: <input type='text' name='nombre_coleccion' "
+                                    + "value='' id='nombre_coleccion' size='30' />"
+                                    + "<button type='button' id='añadir_coleccion'>Añadir</button>");
+    // Handler para crear una nueva coleccion
+    $('p#form-nueva-coleccion button#añadir_coleccion').click(añadir_coleccion);
+    // Handler para añadir alojamientos a la coleccion seleccionada
+    $('div#colecciones .lista-total li').click(añadir_alojamiento_a_coleccion);
 }
 
-// --------------------------------------INFO HOTELES------------------------------------------
 
-// Devuelve las urls de las fotos en formato HTML si las hay
-function url_fotos(multimedia) {
-    if (multimedia == null) {
-        var fotos = '<p>No hay fotos disponibles</p>';
-    } else {
-        var fotos = '<p>Fotos del lugar:</p>';
-        var media = multimedia.media;
-	    for (var i=0; i<media.length; i++) {
-		    fotos = fotos + '<img src="' + media[i].url + '">';
-        }
+// --------------------------------------INFO ALOJAMIENTOS------------------------------------------
+
+// Devuelve las urls de las fotos en formato HTML
+function insertar_fotos(multimedia) {
+    var fotos = '</p><p>';
+    var media = multimedia.media;
+	for (var i=0; i<media.length; i++) {
+		fotos = fotos + '<img src="' + media[i].url + '">';
     }
     return fotos;
 }
@@ -232,6 +269,12 @@ function comprobar_null(alojamiento, txt) {
                 valor = "No disponible";
             }
             break;
+        case "Fotos":
+            try {
+                valor = insertar_fotos(alojamiento.multimedia);
+            } catch (e) {
+                valor = "No disponible";
+            }
         default:
             valor = "Campo erróneo";
     }
@@ -246,12 +289,10 @@ function comprobar_null(alojamiento, txt) {
 		- Carrusel con fotos
 */
 function mostrar_info_reducida(alojamiento) {
-	// Extraigo la información del objeto
 	var nombre = alojamiento.basicData.name;
 	var direccion = comprobar_null(alojamiento, "Direccion");
 	var descripcion = comprobar_null(alojamiento, "Descripcion");
-    var fotos = url_fotos(alojamiento.multimedia);
-    // Concateno la información en formato HTML
+    var fotos = comprobar_null(alojamiento, "Fotos");
 	var infoReducida = '<h2>' + nombre + '</h2>'
 			          + direccion
                       + descripcion
@@ -272,7 +313,6 @@ function mostrar_info_reducida(alojamiento) {
     - Carrusel con fotos
 */
 function mostrar_info_completa(alojamiento) {
-    // Extraigo la información del objeto
     var nombre = alojamiento.basicData.name;
     var lat = comprobar_null(alojamiento, "Latitud");
     var lon = comprobar_null(alojamiento, "Longitud");
@@ -283,8 +323,7 @@ function mostrar_info_completa(alojamiento) {
     var email = comprobar_null(alojamiento, "Email");
     var url = comprobar_null(alojamiento, "Pagina web");
 	var descripcion = comprobar_null(alojamiento, "Descripcion");
-    var fotos = url_fotos(alojamiento.multimedia);
-    // Concateno la información en formato HTML
+    var fotos = comprobar_null(alojamiento, "Fotos");
 	var infoCompleta = '<h2>' + nombre + '</h2>'
                        + lat
                        + lon
@@ -301,23 +340,18 @@ function mostrar_info_completa(alojamiento) {
 
 // Se añade un marcador en el alojamiento y se centra el mapa sobre él
 function añadir_marcador(alojamiento) {
-	// Extraigo las coordenadas, la URL y el nombre
  	var lat = alojamiento.geoData.latitude;
 	var lon = alojamiento.geoData.longitude;
 	var url = alojamiento.basicData.web;
 	var nombre = alojamiento.basicData.name;
-	/* Añado el marcador en esas coordenadas y hago que aparezca su nombre.
-       Habilito el handler para que se muestre la información cuando se haga
-       click en el marcador */
 	L.marker([lat, lon]).addTo(map)
 	 .bindPopup('<a href="' + url + '">' + nombre + '</a><br/>')
 	 .openPopup()
      .on('click', function() {
         // Cuando se hace click se muestra la informacion
-        $('#infoAlojReducida').html(mostrar_info_reducida(alojamiento));
-	    $('#infoAlojCompleta').html(mostrar_info_completa(alojamiento));
+        $('#info-aloj-reducida').html(mostrar_info_reducida(alojamiento));
+	    $('#info-aloj-completa').html(mostrar_info_completa(alojamiento));
      });
-	// Centro el mapa en ese punto
 	map.setView([lat, lon], 15);
 }
 
@@ -327,40 +361,14 @@ function mostrar_alojamiento() {
 	// Me quedo con el objeto correspondiente a este alojamiento a partir del
 	// atributo del elemento seleccionado
  	var alojamiento = alojamientos[$(this).attr('no')];
-	// Muestra la información reducida del alojamiento
-	$('#infoAlojReducida').html(mostrar_info_reducida(alojamiento));
-	// Muestra la información completa del alojamiento
-	$('#infoAlojCompleta').html(mostrar_info_completa(alojamiento));
-	// Añado el marcador del alojamiento sobre el mapa
+	$('#info-aloj-reducida').html(mostrar_info_reducida(alojamiento));
+	$('#info-aloj-completa').html(mostrar_info_completa(alojamiento));
 	añadir_marcador(alojamiento);
 };
 
-// Carga la información de las colecciones
-function cargar_colecciones() {
-    coleccion_seleccionada = "";
-    mostrar_colecciones();
-    // Formulario para crear colecciones
-    $('#form-nueva-coleccion').html("Nombre: <input type='text' name='nombre_coleccion' "
-                                    + "value='' id='nombre_coleccion' size='30' />"
-                                    + "<button type='button' id='añadir_coleccion'>Añadir</button>");
-    // Handler para crear una nueva coleccion
-    $('p#form-nueva-coleccion button#añadir_coleccion').click(añadir_coleccion);
-    // Handler para seleccionar una coleccion
-    $('.lista-colecciones li').click(seleccionar_coleccion);
-}
-
-// Se muestran los botones para cargar y guardar en github y se habilita el handler
-function mostrar_botones() {
-    $('#botones-github').html("<button type='button' id='guardar'>Guardar</button>"
-                              + "<button type='button' id='cargar'>Cargar</button>"
-                              + "<div id='token-form'></div>");
-    $('button#guardar').click(click_guardar);
-    $('button#cargar').click(click_cargar);
-}
-
 // Crea una lista de todos los alojamientos y habilita el handler para cuando se haga click
 // en cada elemento
-function crear_lista_alojamientos() {
+function mostrar_alojamientos() {
     var lista = '<p>Alojamientos encontrados: ' + alojamientos.length + '</p>';
     lista = lista + '<ul>';
 	for (var i = 0; i < alojamientos.length; i++) {
@@ -371,38 +379,35 @@ function crear_lista_alojamientos() {
     $('.lista-total li').click(mostrar_alojamiento);
 }
 
-/* Carga los alojamientos del fichero alojamientos.json. Muestra una lista con el nombre
-   de cada uno de ellos y habilita el handler para clickear sobre ellos. */
+
+// ----------------------------------------GENERAL--------------------------------------------
+
+/* Carga los alojamientos del fichero alojamientos.json. Se genera una lista con todos ellos,
+   se muestran los botones para cargar y guardar la información y se carga la interfaz de las
+   colecciones */
 function cargar_alojamientos() {
 	$.getJSON("JSON/alojamientos.json", function(data) {
-		// Reseteo el elemento cargarJSON pues ahora es inútil
 		$('#cargarJSON').html('');
-		// Guardo en la variable global alojamientos todos los objetos que son alojamientos
-		alojamientos = data.serviceList.service;
-		// Introduzco en una lista no ordenada el nombre de todos los alojamientos
-		crear_lista_alojamientos();
-        // Se muestran en la página los botones para cargar y guardar los datos en github
-        mostrar_botones();
-        // Se cargan todos los campos de las colecciones. Se inicializa la variable global.
-        colecciones = [];
-        cargar_colecciones();
-        // Handler para añadir alojamientos a la coleccion seleccionada
-        $('div#colecciones .lista-total li').click(añadir_alojamiento_a_coleccion);
+		alojamientos = data.serviceList.service; /* Guardo en la variable global alojamientos todos
+                                                    los objetos que son alojamientos */
+		mostrar_alojamientos();
+        mostrar_botones_github();
+        mostrar_interfaz_colecciones();
 	});
 };
 
-
-// ----------------------------------------INICIO--------------------------------------------
-
+// La ejecución del programa comienza aquí
 $(document).ready(function() {
-	// Método para declarar que este elemento sea gestionado como tabs
+	// Método para declarar que el elemento pestañas sea gestionado como tabs
 	$("#pestañas").tabs();
+
 	// Inicializo el mapa en la variable map, selecciono sus coordenadas centrales y el nivel de zoom
 	map = L.map('mapa').setView([40.4175, -3.708], 11);
 	// Añado a map la capa de teselas extraida de OpenStreetMap
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 	}).addTo(map);
+
 	/* Habilito el handler para que cuando se haga click en el elemento cargarJSON se carguen los
 	   alojamientos */
 	$("#cargarJSON").click(cargar_alojamientos);
