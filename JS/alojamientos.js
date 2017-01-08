@@ -107,7 +107,7 @@ function mostrar_alojamientos_coleccion(coleccion) {
         if (coleccion.lista_alojamientos.length == 0) {
             lista = lista + "Todavía no se han añadido alojamientos.";
         } else {
-            lista = lista + '<ul>';
+            lista = lista + '<ul class="lista">';
             for (var i=0; i<coleccion.lista_alojamientos.length; i++) {
                 var id = coleccion.lista_alojamientos[i];
                 lista = lista + '<li no=' + id + '>' + alojamientos[id].basicData.title + '</li>';
@@ -120,6 +120,11 @@ function mostrar_alojamientos_coleccion(coleccion) {
     $('.lista-alojamientos-coleccion').html(lista);
     // Habilito que se pueda seleccionar un alojamiento desde esta lista
     $('.lista-alojamientos-coleccion li').click(mostrar_alojamiento);
+    $('.lista-alojamientos-coleccion li').hover(function() {
+        $(this).css({'cursor': 'pointer', 'background': '#E8E8E8'});
+    }, function() {
+        $(this).css('background', 'white');
+    });
 }
 
 // Añade un alojamiento a la colección seleccionada
@@ -174,7 +179,7 @@ function mostrar_colecciones() {
         lista = lista + "<p>Todavía no hay colecciones creadas.</p>" 
                 + "<p>Puedes cargar colecciones pinchando Cargar en la esquina superior derecha.</p>"
     } else {
-        lista = lista + '<ul>';
+        lista = lista + '<ul class="lista">';
         for (var i=0; i<colecciones.length; i++) {
             lista = lista + '<li no=' + i + '>' + colecciones[i].nombre + '</li>';
         }
@@ -184,7 +189,21 @@ function mostrar_colecciones() {
     if (alojamientos != null) {
         // Handler para seleccionar una coleccion
         $('.lista-colecciones li').click(seleccionar_coleccion);
+        $('.lista-colecciones li').hover(function() {
+            $(this).css({'cursor': 'pointer', 'background': '#E8E8E8'});
+        }, function() {
+            $(this).css('background', 'white');
+        });
     }
+}
+
+// Muestra el formulario para crear colecciones
+function mostrar_formulario_añadir_colecc() {
+    txt = "<h3>Crea una nueva colección</h3>"
+          + "<input type='text' name='nombre_coleccion' placeholder='Nombre' "
+          + "value='' id='nombre_coleccion' size='30' />"
+          + "<button type='button' id='añadir_coleccion'>Añadir</button>";
+    $('#form-nueva-coleccion').html(txt);
 }
 
 // Carga la interfaz de las colecciones
@@ -193,13 +212,10 @@ function mostrar_interfaz_colecciones() {
     coleccion_seleccionada = null;
     mostrar_colecciones();
     mostrar_alojamientos_coleccion();
-    // Formulario para crear colecciones
-    $('#form-nueva-coleccion').html("Nombre: <input type='text' name='nombre_coleccion' "
-                                    + "value='' id='nombre_coleccion' size='30' />"
-                                    + "<button type='button' id='añadir_coleccion'>Añadir</button>");
+    mostrar_formulario_añadir_colecc();
     if (alojamientos != null) {
         // Handler para crear una nueva coleccion
-        $('p#form-nueva-coleccion button#añadir_coleccion').click(añadir_coleccion);
+        $('#form-nueva-coleccion button#añadir_coleccion').click(añadir_coleccion);
         // Handler para añadir alojamientos a la coleccion seleccionada
         $('div#colecciones .lista-total li').click(añadir_alojamiento_a_coleccion);
     }
@@ -488,13 +504,18 @@ function mostrar_alojamientos() {
     var lista = '<h3>Alojamientos</h3>';
     if (alojamientos != null) {
         lista = lista + '<p>Se han encontrado ' + alojamientos.length + ' alojamientos:</p>';
-        lista = lista + '<ul>';
+        lista = lista + '<ul class="lista">';
 	    for (var i = 0; i < alojamientos.length; i++) {
 	        lista = lista + '<li no=' + i + '>' + alojamientos[i].basicData.title + '</li>';
 	    }
         lista = lista + '</ul>';
         $('.lista-total').html(lista);
         $('.lista-total li').click(mostrar_alojamiento);
+        $('.lista-total li').hover(function() {
+            $(this).css({'cursor': 'pointer', 'background': '#E8E8E8'});
+        }, function() {
+            $(this).css('background', 'white');
+        });
     } else {
         lista = lista + '<p>La funcionalidad está restringida si no cargas los alojamientos.</p>'
                 + '<button type="button" id="cargarJSON">Cargar Alojamientos</button>'
