@@ -1,2 +1,79 @@
-#mapa { height: 400px;}
+#mapa { 
+    height: 300px;
+}
 
+.container {
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.row {
+    padding: 20px 10px 20px 10px;
+}
+
+.col-md-4 > * {
+    height: 250px;
+}
+
+.col-md-6 > * {
+    height: 250px;
+}
+
+.col-md-6 > *, .col-md-4 > * {
+    border-style: solid;
+    border-color: #c5c5c5;
+    border-width: 1px;
+    padding: 0px 15px 15px 15px;
+    text-align: center;
+}
+
+.separador {
+    height: 1px;
+    background: #717171;
+}
+
+.lista-total {
+    overflow: auto;
+}
+
+.lista-total li { 
+    margin: 1px; 
+    display: block;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+h2,h3 {
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #c5c5c5; 
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    background: #141f1f;
+    border-color: black;
+}
+
+button#cargarJSON {
+    text-align: center;
+    background: #008CBA;
+    color: white;
+    text-shadow: 1px 1px #000000;
+    padding: 10px 21px;
+    font-size: 1.2em;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
+    border-radius: 4px;
+    margin-top: 30px;
+}
+
+ul {
+    padding-left: 0px;
+}
+
+.imagenes-alojamiento {
+    text-align: center;
+}
