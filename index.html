@@ -17,7 +17,6 @@
 
 		<!-- Javascript -->
 		<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
-		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
         <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -32,10 +31,10 @@
                 <div class="navbar-header">
                     <a class="navbar-brand">Alojamientos en Madrid</a>
                 </div>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a id="boton-cargar" style="cursor:not-allowed"><span class="glyphicon glyphicon-download"></span> Cargar</a></li>
-                <li><a id="boton-guardar" style="cursor:not-allowed"><span class="glyphicon glyphicon-upload"></span> Guardar</a></li>
-            </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a id="boton-cargar" style="cursor:not-allowed"><span class="glyphicon glyphicon-download"></span> Cargar</a></li>
+                    <li><a id="boton-guardar" style="cursor:not-allowed"><span class="glyphicon glyphicon-upload"></span> Guardar</a></li>
+                </ul>
             </div>
         </nav>
         <!-- Contenido -->
@@ -53,10 +52,10 @@
                     <div class="separador"></div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p class="lista-alojamientos-coleccion"></p>
+                            <p class="alojamientos-coleccion"></p>
                         </div>
                         <div class="col-md-6">
-				            <p class="lista-total"></p>
+				            <p class="alojamientos"></p>
                         </div>
                     </div>
                     <div class="separador"></div>
@@ -67,18 +66,18 @@
 			    <div id="colecciones">
                     <div class="row">
                         <div class="col-md-4">
-                            <p class="lista-colecciones"></p>
+                            <p class="colecciones"></p>
                         </div>
                         <div class="col-md-4">
-                            <p class="lista-alojamientos-coleccion"></p>
+                            <p class="alojamientos-coleccion"></p>
                         </div>
                         <div class="col-md-4">
-				            <p class="lista-total"></p>
+				            <p class="alojamientos"></p>
                         </div>
                     </div>
                     <div class="separador"></div>
                     <div class="row">
-                        <p id="form-nueva-coleccion"></p>
+                        <p id="nueva-coleccion"></p>
                     </div>
 			    </div>
 			    <div id="alojamientos">
