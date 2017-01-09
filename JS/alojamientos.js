@@ -4,8 +4,8 @@
 function guardar_datos() {
     // Extraigo los datos de los campos
     var token = $("#token").val();
-    var repo_name = $("#repo").val();
-    var fichero = $("#nombre_fich").val();
+    var repo_name = 'X-Nav-Practica-Hoteles';
+    var fichero = 'datos.json';
     // Quito el formulario
     $('#token-form').remove();
     // Objeto github
@@ -23,7 +23,11 @@ function guardar_datos() {
             var contenido = JSON.stringify(colecciones);
             repositorio.write('master', fichero, contenido,
                 "Actualizando datos", function(err) {
-                    console.log (err)
+                    if (err == null) {
+                        alert("Éxito al guardar");
+                    } else {
+                        alert(err);
+                    }
                 });
         }  
     });
@@ -32,8 +36,8 @@ function guardar_datos() {
 // Comprueba que el token sea correcto y carga los datos del fichero y repositorio indicados
 function cargar_datos() {
     var token = $("#token").val();
-    var repo_name = $("#repo").val();
-    var fichero = $("#nombre_fich").val();
+    var repo_name = 'X-Nav-Practica-Hoteles';
+    var fichero = 'datos.json';
     // Quito el formulario
     $('#token-form').remove();  
     // Objeto github
@@ -61,14 +65,11 @@ function cargar_datos() {
    fichero, y habilita el handler para guardar los datos */
 function form_guardar() {
     $('#token-form').remove();
-    $('#pestañas').before("<div id='token-form'>"
-                          + "Token: <input type='text' name='token' value='' id='token' "
+    $('#principal').before("<div id='token-form'>"
+                          + "<h3>Guardar datos en Github</h3>"
+                          + "<input type='text' name='token' value='' id='token' placeholder='Token'"
                           + "size='36' />"
-                          + "Repositorio: <input type='text' name='repo' value='X-Nav-Practica-Hoteles' "
-                          + "id='repo' size='15' />"
-                          + "Fichero: <input type='text' name='nombre_fich' id='nombre_fich' "
-                          + "value='datos.json' size='10' />"
-                          + "<button type='button' id='guardar-github'>Guardar en Github</button>"
+                          + "<button type='button' id='guardar-github'><span class='glyphicon glyphicon-upload'></span></button>"
                           + "</div>");
     $("div#token-form button#guardar-github").click(guardar_datos);
 }
@@ -76,14 +77,11 @@ function form_guardar() {
 /* Muestra el formulario para introducir el token y habilita el handler para guardar los datos */
 function form_cargar() {
     $('#token-form').remove();
-    $('#pestañas').before("<div id='token-form'>"
-                          + "Token: <input type='text' name='token' value='' id='token' "
+    $('#principal').before("<div id='token-form'>"
+                          + "<h3>Cargar datos de Github</h3>"
+                          + "<input type='text' name='token' value='' id='token' placeholder='Token'"
                           + "size='36' />"
-                          + "Repositorio: <input type='text' name='repo' value='X-Nav-Practica-Hoteles' "
-                          + "id='repo' size='15' />"
-                          + "Fichero: <input type='text' name='nombre_fich' id='nombre_fich' "
-                          + "value='datos.json' size='10' />"
-                          + "<button type='button' id='cargar-github'>Cargar de Github</button>"
+                          + "<button type='button' id='cargar-github'><span class='glyphicon glyphicon-download'></span></button>"
                           + "</div>");
     $("div#token-form button#cargar-github").click(cargar_datos);
 }
@@ -105,7 +103,7 @@ function mostrar_alojamientos_coleccion(coleccion) {
     if (coleccion_seleccionada != null) {
         lista = lista + "<p>Lista de alojamientos de la colección " + coleccion.nombre + ":</p>";
         if (coleccion.lista_alojamientos.length == 0) {
-            lista = lista + "Todavía no se han añadido alojamientos.";
+            lista = lista + "Todavía no se han añadido alojamientos. Pincha en el que desees añadir para agregarlo.";
         } else {
             lista = lista + '<ul class="lista">';
             for (var i=0; i<coleccion.lista_alojamientos.length; i++) {
@@ -202,7 +200,7 @@ function mostrar_formulario_añadir_colecc() {
     txt = "<h3>Crea una nueva colección</h3>"
           + "<input type='text' name='nombre_coleccion' placeholder='Nombre' "
           + "value='' id='nombre_coleccion' size='30' />"
-          + "<button type='button' id='añadir_coleccion'>Añadir</button>";
+          + "<button type='button' id='añadir_coleccion'><span class='glyphicon glyphicon-plus'></span></button>";
     $('#form-nueva-coleccion').html(txt);
 }
 
@@ -451,7 +449,7 @@ function mostrar_info_completa(alojamiento) {
 	    var infoCompleta = '<h2>' + nombre + '</h2>'
                            + '<h3>Descripcion</h3>'
                            + descripcion + '<br>'
-                           + '<p>' + '<span data-toggle="tooltip" data-original-title="Página web" class="glyphicon glyphicon-link"></span> '
+                           + '<p>' + '<span data-toggle="tooltip" data-original-title="Coordenadas GPS" class="glyphicon glyphicon-map-marker"></span> '
                            + lat + 'W, ' + lon + 'N</p>'
 			               + direccion
                            + clasif
@@ -518,7 +516,7 @@ function mostrar_alojamientos() {
         });
     } else {
         lista = lista + '<p>La funcionalidad está restringida si no cargas los alojamientos.</p>'
-                + '<button type="button" id="cargarJSON">Cargar Alojamientos</button>'
+                + '<button type="button" class="cargarJSON">Cargar Alojamientos</button>'
         $('.lista-total').html(lista);
     }
 }
@@ -560,5 +558,5 @@ $(document).ready(function() {
     
 	/* Habilito el handler para que cuando se haga click en el elemento cargarJSON se carguen los
 	   alojamientos */
-	$("#cargarJSON").click(cargar_alojamientos);
+	$(".cargarJSON").click(cargar_alojamientos);
 });

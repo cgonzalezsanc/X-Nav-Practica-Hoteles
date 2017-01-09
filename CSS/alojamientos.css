@@ -50,6 +50,10 @@
     border-width: 1px;
 }
 
+#token-form {
+    padding: 15px 15px 15px 15px;
+}
+
 h2,h3 {
     padding-bottom: 15px;
     margin-bottom: 25px;
@@ -63,7 +67,7 @@ h2,h3 {
     border-color: black;
 }
 
-button#añadir_coleccion {
+button#añadir_coleccion, button#guardar-github, button#cargar-github {
     background: #008CBA;
     color: white;
     text-shadow: 1px 1px #000000;
@@ -71,7 +75,7 @@ button#añadir_coleccion {
     border-radius: 4px;
 }
 
-button#cargarJSON {
+button.cargarJSON {
     text-align: center;
     background: #008CBA;
     color: white;
