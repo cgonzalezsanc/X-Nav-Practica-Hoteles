@@ -15,6 +15,9 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link href="CSS/alojamientos.css" rel="stylesheet">
 
+        <!-- Favicon -->
+        <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+
 		<!-- Javascript -->
 		<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
         <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
@@ -43,7 +46,8 @@
 			    <ul>
 				    <li><a href="#principal">Principal</a></li>
 				    <li><a href="#colecciones">Colecciones</a></li>
-				    <li><a href="#alojamientos">Alojamientos</a></li>
+				    <li><a href="#alojamiento">Alojamiento</a></li>
+                    <li><a href="#buscador-alojamiento">Buscar</a></li>
 			    </ul>
 			    <div id="principal">
                     <div class="row">
@@ -60,7 +64,7 @@
                     </div>
                     <div class="separador"></div>
                     <div class="row">
-				        <p id="info-aloj-reducida"></p>
+				        <p class="info-aloj-reducida"></p>
                     </div>
 			    </div>
 			    <div id="colecciones">
@@ -80,9 +84,23 @@
                         <p id="nueva-coleccion"></p>
                     </div>
 			    </div>
-			    <div id="alojamientos">
+			    <div id="alojamiento">
 				    <p id="info-aloj-completa"></p>
 			    </div>
+                <div id="buscador-alojamiento">
+                   <div class="row">
+                        <div class="col-md-6">
+                            <p id="buscador"></p>
+                        </div>
+                        <div class="col-md-6">
+				            <p id="alojamientos-encontrados"></p>
+                        </div>
+                    </div>
+                    <div class="separador"></div>
+                    <div class="row">
+				        <p class="info-aloj-reducida"></p>
+                    </div>
+                </div>
 		    </div>
         </div>
 	</body>

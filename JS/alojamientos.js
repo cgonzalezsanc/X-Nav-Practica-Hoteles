@@ -179,7 +179,7 @@ function mostrar_colecciones() {
         lista = lista + "<p>Todavía no hay colecciones creadas.</p>" 
                 + "<p>Puedes cargar colecciones pinchando Cargar en la esquina superior derecha.</p>"
     } else {
-        lista = lista + '<ul class="lista">';
+        lista = lista + '<p>Selecciona una colección haciendo click en ella</p> <ul class="lista">';
         for (var i=0; i<colecciones.length; i++) {
             lista = lista + '<li no=' + i + '>' + colecciones[i].nombre + '</li>';
         }
@@ -488,7 +488,7 @@ function añadir_marcador(alojamiento) {
 	 .openPopup()
      .on('click', function() {
         // Cuando se hace click se muestra la informacion
-        $('#info-aloj-reducida').html(info_reducida(alojamiento));
+        $('.info-aloj-reducida').html(info_reducida(alojamiento));
 	    $('#info-aloj-completa').html(info_completa(alojamiento));
      });
 	map.setView([lat, lon], 15);
@@ -500,7 +500,7 @@ function mostrar_alojamiento() {
 	// Me quedo con el objeto correspondiente a este alojamiento a partir del
 	// atributo del elemento seleccionado
  	var alojamiento = alojamientos[$(this).attr('no')];
-	$('#info-aloj-reducida').html(info_reducida(alojamiento));
+	$('.info-aloj-reducida').html(info_reducida(alojamiento));
 	$('#info-aloj-completa').html(info_completa(alojamiento));
     // Activo los tooltip
     $('[data-toggle="tooltip"]').tooltip();
@@ -532,6 +532,48 @@ function mostrar_alojamientos() {
     }
 }
 
+// ----------------------------------------BUSCAR--------------------------------------------
+
+// Busca un alojamiento que contenga la cadena introducida por el usuario en el form_buscar
+function buscar_alojamientos() {
+    var txt = $("#form_buscar").val();
+    var lista = '<ul class="lista">';
+    var contador = 0;
+    for (i = 0; i < alojamientos.length; i++) {
+        if (alojamientos[i].basicData.title.toLowerCase().includes(txt.toLowerCase())) {
+            lista = lista + '<li no=' + i + '>' + alojamientos[i].basicData.title + '</li>';
+            contador = contador+1;
+        }
+    }
+    lista = "<p>Se han encontrado " + contador.toString() + " alojamientos</p>" + lista;
+    lista = lista + '</ul>';
+    $("#lista-filtrada").html(lista);
+    $('#lista-filtrada li').click(mostrar_alojamiento);
+    $('#lista-filtrada li').hover(function() {
+        $(this).css({'cursor': 'pointer', 'background': '#E8E8E8'});
+    }, function() {
+        $(this).css('background', 'white');
+    });
+}
+
+// Muestra la interfaz del buscador y habilita el handler para buscar
+function mostrar_buscador() {
+    var txt = "<h3>Buscar alojamiento</h3>"
+              + "<p>Introduce el alojamiento que quieres buscar.</p><br>";
+    if (alojamientos == null) {
+        txt = txt + "<p>Debes cargar los alojamientos.</p>"
+        $("#buscador").html(txt);
+    } else {
+        txt = txt + "<input type='text' name='form_buscar' placeholder='Ej: Atocha, Moncloa...' "
+              + "value='' id='form_buscar' size='30' />"
+              + "<button type='button' id='buscar'><span class='glyphicon glyphicon-search'></span></button>";
+        $("#buscador").html(txt);
+        $('button#buscar').click(buscar_alojamientos);
+    }
+    $("#alojamientos-encontrados").html("<h3>Alojamientos encontrados</h3>"
+                                        + "<p id='lista-filtrada'>Aquí se mostrarán los resultados</p>");
+}
+
 
 // ----------------------------------------GENERAL--------------------------------------------
 
@@ -545,6 +587,7 @@ function cargar_alojamientos() {
 		mostrar_alojamientos();
         activar_botones_github();
         mostrar_interfaz_colecciones();
+        mostrar_buscador();
 	});
 };
 
@@ -562,9 +605,10 @@ $(document).ready(function() {
 
     // Inicializo la variable global alojamientos a null
     alojamientos = null;
-    // Cargo la información de las tres pestañas
+    // Cargo la información de las pestañas
     mostrar_alojamientos();
     mostrar_interfaz_colecciones();
+    mostrar_buscador();
     $('#info-aloj-completa').html(info_completa(null));
     
 	/* Habilito el handler para que cuando se haga click en el elemento cargarJSON se carguen los
