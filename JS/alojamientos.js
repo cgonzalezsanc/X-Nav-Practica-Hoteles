@@ -556,7 +556,7 @@ function buscar_alojamientos() {
     });
 }
 
-// Muestra la interfaz del buscador y habilita el handler para buscar
+// Muestra la interfaz del buscador y habilita el handler para buscar cuando se hayan cargado los alojamientos
 function mostrar_buscador() {
     var txt = "<h3>Buscar alojamiento</h3>"
               + "<p>Introduce el alojamiento que quieres buscar.</p><br>";
@@ -579,7 +579,7 @@ function mostrar_buscador() {
 
 /* Carga los alojamientos del fichero alojamientos.json. Se genera una lista con todos ellos,
    se activan los botones para cargar y guardar la información y se carga la interfaz de las
-   colecciones */
+   colecciones y del buscador */
 function cargar_alojamientos() {
 	$.getJSON("JSON/alojamientos.json", function(data) {
 		alojamientos = data.serviceList.service; /* Guardo en la variable global alojamientos todos
