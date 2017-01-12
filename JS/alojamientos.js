@@ -599,7 +599,7 @@ $(document).ready(function() {
 	// Inicializo el mapa en la variable map, selecciono sus coordenadas centrales y el nivel de zoom
 	map = L.map('mapa').setView([40.4175, -3.708], 11);
 	// Añado a map la capa de teselas extraida de OpenStreetMap
-	L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 	}).addTo(map);
 
